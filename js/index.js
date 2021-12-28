@@ -26,10 +26,12 @@ function printFiftyMonsters(arrayAllMonsters){
 
 function printOneMonster(monster){
     let div = document.createElement('div')
+    div.id = monster.id
         div.innerHTML = `
         <h2>${monster.name} (id: ${monster.id})</h2>
         <h4>${monster.age}</h4>
         <p>${monster.description}</p>
+        <button onclick = "deleteMonster(${monster.id})">Delete</button>
         `
         container.appendChild(div)
 }
@@ -70,5 +72,17 @@ function postNewMonster(monster){
         body: JSON.stringify(monster)
     })
     .then(res => res.json())
-    .then(monster => console.log(monster))
+    .then(monster => {
+        // console.log(monster)
+        printOneMonster(monster)
+    })
 }
+
+function deleteMonster(id){
+    let div = document.getElementById(id)
+    fetch(`http://localhost:3000/monsters/${id}`,{
+        method : "DELETE",
+    })
+    .then(res => div.remove())
+}
+
